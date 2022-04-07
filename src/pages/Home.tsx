@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import illustrationImg from "../assets/images/illustration.svg";
 import logoImg from "../assets/images/logo.svg";
 import googleImg from "../assets/images/google-icon.svg";
@@ -5,8 +7,18 @@ import googleImg from "../assets/images/google-icon.svg";
 import "../styles/auth.scss";
 
 import { Button } from "../components/Button";
+import { useAuth } from "../contexts/auth";
 
 export function Home() {
+  const navigate = useNavigate();
+  const { user, signInWithGoogle } = useAuth();
+
+  const handleCreateRoom = async () => {
+    if (!user) await signInWithGoogle();
+
+    navigate("/rooms/new");
+  };
+
   return (
     <div id="page-auth">
       <aside>
@@ -22,7 +34,7 @@ export function Home() {
         <div className="main-content">
           <img src={logoImg} alt="Letmeask" />
 
-          <button className="create-room">
+          <button className="create-room" onClick={handleCreateRoom}>
             <img src={googleImg} alt="Logo do Google" />
             Crie sua sala com Google
           </button>
